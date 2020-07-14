@@ -14,5 +14,5 @@ This project is simple app for fetching github users using Github API.
 Created with:
 
 -   PHP 7.3+
--   MySQL
+-   MySQL 5.7.26
 -   Laravel 7
