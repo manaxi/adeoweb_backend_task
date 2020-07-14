@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use App\Category;
+use App\Product;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,6 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        $this->call(ProductTableSeeder::class);
+        $this->call(CategoriesTableSeeder::class);
+
+        $categories = Category::all();
+        Product::all()->each(function($product) use($categories){
+            $product->categories()->attach(
+                $categories->random(rand(1,2))->pluck('id')->toArray()
+            );
+        });
     }
 }

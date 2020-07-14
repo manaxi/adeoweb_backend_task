@@ -15,4 +15,9 @@ class Category extends Model
 
     protected $fillable = ['name', 'weather', 'slug'];
 
+    public function products()
+    {
+        return $this->belongsToMany('App\Product');
+    }
+
 }

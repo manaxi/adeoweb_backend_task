@@ -14,4 +14,9 @@ class Product extends Model
     public $timestamps = true;
 
     protected $fillable = ['name', 'sku', 'price', 'status'];
+
+    public function categories()
+    {
+        return $this->belongsToMany('App\Category');
+    }
 }
