@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Product;
 use Cache;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -11,9 +9,33 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use App\Http\Requests;
+
+use App\Category;
+use App\Product;
+use App\Http\Resources\Product as ProductResource;
 
 class ProductsController extends Controller
 {
+    public function getProducts()
+    {
+        // Get products
+        $products = Product::paginate(15);
+        // return collection of products as a resource
+        return ProductResource::collection($products);
+    }
+
+    /**
+     * Show product by certain id
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        return new ProductResource($product);
+    }
+
     /**
      * Show recommended products by current weather
      *
@@ -83,17 +105,6 @@ class ProductsController extends Controller
             }
         });
         return $cityForecast;
-    }
-
-    /**
-     * Show product by certain id
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function showProduct($id)
-    {
-        $products = Product::find($id);
-        return response()->json($products);
     }
 
     /** Paginating result for array
