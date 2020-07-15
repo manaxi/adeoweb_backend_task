@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use App\Http\Requests;
+use Illuminate\Http\Request;
 
 use App\Category;
 use App\Product;
@@ -34,6 +34,26 @@ class ProductsController extends Controller
     {
         $product = Product::findOrFail($id);
         return new ProductResource($product);
+    }
+
+    public function storeProduct(Request $request)
+    {
+        $product = $request->isMethod('put') ? Product::findOrFail($request->product_id) : new Product;
+        $product->id = $request->input('product_id');
+        $product->name = $request->input('name');
+        $product->sku = $request->input('sku');
+        $product->price = $request->input('price');
+        $product->status = $request->input('status');
+        if ($product->save())
+            return new ProductResource($product);
+        return null;
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        if ($product->delete())
+            return new ProductResource($product);
     }
 
     /**

@@ -18,8 +18,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('products')->name('products.')->group(function() {
+Route::prefix('products')->name('products.')->group(function () {
+    Route::post('/', 'ProductsController@storeProduct');
+    Route::put('/', 'ProductsController@storeProduct');
     Route::get('/', 'ProductsController@getProducts');
     Route::get('/{id}', 'ProductsController@showProduct')->name('showProduct');
     Route::get('/recommended/{city}', 'ProductsController@recommendedProducts')->name('recommendedProducts');
+    Route::delete('/{id}', 'ProductsController@deleteProduct');
 });
