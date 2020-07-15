@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Cache;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -96,7 +97,7 @@ class ProductsController extends Controller
         else
             $cityForecast = $this->getCityForecast($cityCode);
 
-        if (isset($cityForecast->place)) {
+        if (array_key_exists('place', $cityForecast)) {
             foreach ($cityForecast['forecastTimestamps'] as $key => $value) {
                 if ($value['forecastTimeUtc'] == $currentTime)
                     $forecast = $value;
@@ -109,9 +110,8 @@ class ProductsController extends Controller
                 'recommended_products' => $this->getProductsByCondition($forecast['conditionCode'])
             ];
             return response()->json($data, 200);
-        } else {
+        } else
             return response()->json($cityForecast, 200);
-        }
     }
 
     /**
@@ -143,7 +143,7 @@ class ProductsController extends Controller
             try {
                 $response = $client->get("https://api.meteo.lt/v1/places/${cityCode}/forecasts/long-term");
                 $data = $response->getBody()->getContents();
-                return json_decode($data, 200);
+                return json_decode($data, true);
             } catch (ClientException $e) {
                 return response()->json([
                     'status' => 'error',
