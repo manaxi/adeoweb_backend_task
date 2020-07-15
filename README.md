@@ -1,6 +1,6 @@
 # Adeoweb (Back End Task)
 
-> Demo API service url:
+> Demo API service url: https://secure-wave-65543.herokuapp.com
 
 ## Table of contents
 
