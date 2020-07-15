@@ -95,7 +95,8 @@ class ProductsController extends Controller
             $cityForecast = Cache::get($cityCode);
         else
             $cityForecast = $this->getCityForecast($cityCode);
-        if (isset($cityForecast['place'])) {
+
+        if (isset($cityForecast->place)) {
             foreach ($cityForecast['forecastTimestamps'] as $key => $value) {
                 if ($value['forecastTimeUtc'] == $currentTime)
                     $forecast = $value;
@@ -107,8 +108,10 @@ class ProductsController extends Controller
                 'forecast_source' => 'LHMT - api.meteo.lt',
                 'recommended_products' => $this->getProductsByCondition($forecast['conditionCode'])
             ];
+            return response()->json($data, 200);
+        } else {
+            return response()->json($cityForecast, 200);
         }
-        return response()->json($data, 200);
     }
 
     /**
