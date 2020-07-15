@@ -20,4 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('products')->name('products.')->group(function() {
     Route::get('/{id}', 'ProductsController@showProduct')->name('showProduct');
+    Route::get('/recommended/{city}', 'ProductsController@recommendedProducts')->name('recommendedProducts');
 });
