@@ -11,7 +11,9 @@
 
 ## General info
 
-Service which returns product recommendations depending on current weather
+Service which returns product recommendations depending on current weather.
+
+> For current weather used LHMT https://api.meteo.lt/
 
 ## Technologies
 
