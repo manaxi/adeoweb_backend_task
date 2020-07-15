@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Cache;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -21,7 +20,7 @@ class ProductsController extends Controller
     public function getProducts()
     {
         // Get products
-        $products = Product::paginate(15);
+        $products = Product::paginate(10);
         // return collection of products as a resource
         return ProductResource::collection($products);
     }
@@ -60,7 +59,7 @@ class ProductsController extends Controller
         if ($validatedData->fails()) {
             foreach ($validatedData->errors()->getMessages() as $item)
                 $errors[] = $item;
-            return response()->json(['errors' => $errors]);
+            return response()->json(['errors' => $errors], 200);
         } else {
             $product->save();
             if (isset($request->categories))
@@ -161,7 +160,7 @@ class ProductsController extends Controller
      * @param array $options
      * @return LengthAwarePaginator
      */
-    public function paginate($items, $perPage = 1, $page = null, $options = [])
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);

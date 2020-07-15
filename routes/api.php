@@ -26,3 +26,13 @@ Route::prefix('products')->name('products.')->group(function () {
     Route::get('/recommended/{city}', 'ProductsController@recommendedProducts')->name('recommendedProducts');
     Route::delete('/{id}', 'ProductsController@deleteProduct');
 });
+
+// Categories API routing
+Route::prefix('categories')->name('categories.')->group(function () {
+    Route::post('/', 'CategoriesController@storeCategory');
+    Route::put('/', 'CategoriesController@storeCategory');
+    Route::get('/', 'CategoriesController@getCategories');
+    Route::get('/{id}', 'CategoriesController@showCategory');
+    Route::get('/{id}/products', 'CategoriesController@showCategoryProducts');
+    Route::delete('/{id}', 'CategoriesController@deleteCategory');
+});

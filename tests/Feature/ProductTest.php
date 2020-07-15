@@ -13,10 +13,23 @@ class ProductTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function testRetrieveProduct()
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        $product = factory(Product::class)->create([
+            'name' => 'Huawei watch',
+            'price' => '200',
+            'sku' => '153308796',
+            'status' => '1',
+            'categories' => ['2', '1'],
+        ]);
+        $this->json('GET', 'api/product/' . $product->id, [], [
+            'Accept' => 'application/json'
+        ])->assertStatus(200)
+            ->assertJson([
+                'name' => 'Huawei watch',
+                'price' => '200',
+                'sku' => '153308796',
+                'status' => '1'
+            ]);
     }
 }
