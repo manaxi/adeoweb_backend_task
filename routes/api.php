@@ -36,3 +36,7 @@ Route::prefix('categories')->name('categories.')->group(function () {
     Route::get('/{id}/products', 'CategoriesController@showCategoryProducts');
     Route::delete('/{id}', 'CategoriesController@deleteCategory');
 });
+
+Route::prefix('cities')->group(function () {
+    Route::get('/', 'CitiesController@getCities');
+});
