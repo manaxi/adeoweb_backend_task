@@ -10,7 +10,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
-
+use \Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use App\Category;
 use App\Product;
 use App\Http\Resources\Product as ProductResource;
@@ -36,19 +37,47 @@ class ProductsController extends Controller
         return new ProductResource($product);
     }
 
+    /** Store product
+     * @param Request $request
+     * @return ProductResource|\Illuminate\Http\JsonResponse|null
+     */
     public function storeProduct(Request $request)
     {
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required|max:55|min:5',
+            'sku' => 'required|min:9',
+            'price' => 'numeric|required',
+            'status' => ['required', Rule::in(['0', '1'])],
+            'categories' => 'required',
+        ]);
         $product = $request->isMethod('put') ? Product::findOrFail($request->product_id) : new Product;
-        $product->id = $request->input('product_id');
-        $product->name = $request->input('name');
-        $product->sku = $request->input('sku');
-        $product->price = $request->input('price');
-        $product->status = $request->input('status');
-        if ($product->save())
-            return new ProductResource($product);
+        $product->id = $request->product_id;
+        $product->name = $request->name;
+        $product->sku = $request->sku;
+        $product->price = $request->price;
+        $product->status = $request->status;
+
+        if ($validatedData->fails()) {
+            foreach ($validatedData->errors()->getMessages() as $item)
+                $errors[] = $item;
+            return response()->json(['errors' => $errors]);
+        } else {
+            $product->save();
+            if (isset($request->categories))
+                $product->categories()->sync($request->categories);
+            else
+                $product->categories()->sync(array());
+
+            if ($product->save())
+                return new ProductResource($product);
+        }
         return null;
     }
 
+    /** Delete product
+     * @param $id - product id
+     * @return ProductResource
+     */
     public function deleteProduct($id)
     {
         $product = Product::findOrFail($id);
@@ -56,9 +85,7 @@ class ProductsController extends Controller
             return new ProductResource($product);
     }
 
-    /**
-     * Show recommended products by current weather
-     *
+    /** Show recommended products by current weather
      * @param int $id
      * @return \Illuminate\Http\Response
      */

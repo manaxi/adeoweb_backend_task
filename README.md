@@ -4,6 +4,7 @@
 
 -   [General info](#general-info)
 -   [Technologies](#technologies)
+-   [Endpoints](#endpoints)
 
 ## General info
 
