@@ -97,7 +97,7 @@ class ProductsController extends Controller
         else
             $cityForecast = $this->getCityForecast($cityCode);
 
-        if (array_key_exists('place', $cityForecast)) {
+        if (isset($cityForecast['place'])) {
             foreach ($cityForecast['forecastTimestamps'] as $key => $value) {
                 if ($value['forecastTimeUtc'] == $currentTime)
                     $forecast = $value;
@@ -145,12 +145,7 @@ class ProductsController extends Controller
                 $data = $response->getBody()->getContents();
                 return json_decode($data, true);
             } catch (ClientException $e) {
-                return response()->json([
-                    'status' => 'error',
-                    'code' => 404,
-                    'message' => 'Oops, looks like something went wrong',
-                    'errors' => json_decode($e->getResponse()->getBody()->getContents(), 204)
-                ]);
+                return json_decode($e->getResponse()->getBody()->getContents(), true);
             }
         });
         return $cityForecast;
