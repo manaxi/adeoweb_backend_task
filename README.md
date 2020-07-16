@@ -167,3 +167,6 @@ GET api/categories/{id}/products
 ```bash
 GET api/cities
 ```
+
+## Author
+> Mantas Pečiulis
