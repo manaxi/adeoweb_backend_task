@@ -32,6 +32,8 @@ git clone https://github.com/manaxi/adeoweb_task
 # Install Dependencies
 composer install
 
+# Create database and edit .env file
+
 # Migrate database
 php artisan migrate
 
