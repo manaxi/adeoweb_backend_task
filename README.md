@@ -1,6 +1,6 @@
 # Adeoweb (Back End Task)
 
-> Demo API service url:
+> Demo API service url: https://secure-wave-65543.herokuapp.com
 
 ## Table of contents
 
@@ -31,6 +31,8 @@ git clone https://github.com/manaxi/adeoweb_task
 
 # Install Dependencies
 composer install
+
+# Create database and edit .env file
 
 # Migrate database
 php artisan migrate

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Cache;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -95,6 +96,7 @@ class ProductsController extends Controller
             $cityForecast = Cache::get($cityCode);
         else
             $cityForecast = $this->getCityForecast($cityCode);
+
         if (isset($cityForecast['place'])) {
             foreach ($cityForecast['forecastTimestamps'] as $key => $value) {
                 if ($value['forecastTimeUtc'] == $currentTime)
@@ -107,8 +109,9 @@ class ProductsController extends Controller
                 'forecast_source' => 'LHMT - api.meteo.lt',
                 'recommended_products' => $this->getProductsByCondition($forecast['conditionCode'])
             ];
-        }
-        return response()->json($data, 200);
+            return response()->json($data, 200);
+        } else
+            return response()->json($cityForecast, 200);
     }
 
     /**
@@ -140,14 +143,9 @@ class ProductsController extends Controller
             try {
                 $response = $client->get("https://api.meteo.lt/v1/places/${cityCode}/forecasts/long-term");
                 $data = $response->getBody()->getContents();
-                return json_decode($data, 200);
+                return json_decode($data, true);
             } catch (ClientException $e) {
-                return response()->json([
-                    'status' => 'error',
-                    'code' => 404,
-                    'message' => 'Oops, looks like something went wrong',
-                    'errors' => json_decode($e->getResponse()->getBody()->getContents(), 204)
-                ]);
+                return json_decode($e->getResponse()->getBody()->getContents(), true);
             }
         });
         return $cityForecast;
