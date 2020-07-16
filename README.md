@@ -27,7 +27,7 @@ Created with:
 
 ```bash
 # Download GitHub project or clone
-git clone https://github.com/manaxi/adeoweb_task
+git clone https://github.com/manaxi/adeoweb_backend_task
 
 # Install Dependencies
 composer install
